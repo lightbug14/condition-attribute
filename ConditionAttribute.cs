@@ -122,7 +122,7 @@ public class ConditionAttributeEditor : PropertyDrawer
                 switch( target.conditionType )
                 {
                     case ConditionAttribute.ConditionType.IsTrue:
-                        result = conditionPropertyIntValue != 0f;
+                        result = conditionPropertyIntValue != 0;
                         break;
                     case ConditionAttribute.ConditionType.IsGreaterThan:
                         result = conditionPropertyIntValue > argumentIntValue;

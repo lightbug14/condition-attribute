@@ -73,6 +73,8 @@ public class ConditionAttributeEditor : PropertyDrawer
 
 	}
 
+    bool result = false;
+
     bool CheckCondition( SerializedProperty property )
     {
         SerializedProperty conditionProperty = property.serializedObject.FindProperty( target.conditionPropertyName );
@@ -81,18 +83,16 @@ public class ConditionAttributeEditor : PropertyDrawer
         if( conditionProperty == null )
             return true;
         
-        bool result = false;
+        result = false;
 
         SerializedPropertyType conditionPropertyType = conditionProperty.propertyType;
 
-        switch( conditionPropertyType )
+        if( conditionPropertyType == SerializedPropertyType.Boolean)
         {
-            case SerializedPropertyType.Boolean:
-
-                result = conditionProperty.boolValue;
-                
-                break;
-            case SerializedPropertyType.Float:
+            result = conditionProperty.boolValue;
+        }
+        else if( conditionPropertyType == SerializedPropertyType.Float )
+        {
                 
                 float conditionPropertyFloatValue = conditionProperty.floatValue;
                 float argumentFloatValue = target.value;
@@ -113,29 +113,28 @@ public class ConditionAttributeEditor : PropertyDrawer
                         break;
                 }
                 
-                break;
-            case SerializedPropertyType.Integer | SerializedPropertyType.Enum:
-                
-                int conditionPropertyIntValue = conditionProperty.intValue;
-                int argumentIntValue = (int)target.value;
+        }
+        else if( conditionPropertyType == SerializedPropertyType.Integer || conditionPropertyType == SerializedPropertyType.Enum )
+        {
+            int conditionPropertyIntValue = conditionProperty.intValue;
+            int argumentIntValue = (int)target.value;
 
-                switch( target.conditionType )
-                {
-                    case ConditionAttribute.ConditionType.IsTrue:
-                        result = conditionPropertyIntValue != 0;
-                        break;
-                    case ConditionAttribute.ConditionType.IsGreaterThan:
-                        result = conditionPropertyIntValue > argumentIntValue;
-                        break;
-                    case ConditionAttribute.ConditionType.IsEqualTo:
-                        result = conditionPropertyIntValue == argumentIntValue;
-                        break;
-                    case ConditionAttribute.ConditionType.IsLessThan:
-                        result = conditionPropertyIntValue < argumentIntValue;
-                        break;
-                }
-                
-                break;
+            switch( target.conditionType )
+            {
+                case ConditionAttribute.ConditionType.IsTrue:
+                    result = conditionPropertyIntValue != 0;
+                    break;
+                case ConditionAttribute.ConditionType.IsGreaterThan:
+                    result = conditionPropertyIntValue > argumentIntValue;
+                    break;
+                case ConditionAttribute.ConditionType.IsEqualTo:
+                    result = conditionPropertyIntValue == argumentIntValue;
+                    break;
+                case ConditionAttribute.ConditionType.IsLessThan:
+                    result = conditionPropertyIntValue < argumentIntValue;
+                    break;
+            }
+            
         }        
         
         return result;
@@ -144,7 +143,10 @@ public class ConditionAttributeEditor : PropertyDrawer
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        return EditorGUI.GetPropertyHeight( property );
+        if( target == null )
+			target = attribute as ConditionAttribute;    
+        
+        return !result && target.visibilityType == ConditionAttribute.VisibilityType.Hidden ? 0f : EditorGUI.GetPropertyHeight( property );
     }
 
     
@@ -152,6 +154,4 @@ public class ConditionAttributeEditor : PropertyDrawer
 }
 
 #endif
-
-
 

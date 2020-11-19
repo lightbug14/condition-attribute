@@ -114,7 +114,7 @@ public class ConditionAttributeEditor : PropertyDrawer
                 }
                 
                 break;
-            case SerializedPropertyType.Integer:
+            case SerializedPropertyType.Integer | SerializedPropertyType.Enum:
                 
                 int conditionPropertyIntValue = conditionProperty.intValue;
                 int argumentIntValue = (int)target.value;

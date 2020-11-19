@@ -27,21 +27,21 @@ public class ConditionAttribute : PropertyAttribute
     public VisibilityType visibilityType;
     public float value;
 
-    public System.Func<string , bool> Condition { get ; private set; } 
-
     /// <summary>
-    /// 
+    /// This attribute will determine the visibility of the target property based on some other property condition. Use this attribute if the target property 
+    /// depends on some other property inside the class.
     /// </summary>
     /// <param name="conditionPropertyName">Name of the property used by the condition.</param>
-    /// <param name="conditionType">Type of the condition.</param>
-    /// <param name="visibilityType">The action to performed if the condition is not met.</param>
-    /// <param name="value">A float value</param>
-    public ConditionAttribute( string conditionPropertyName , ConditionType conditionType , VisibilityType visibilityType = VisibilityType.Hidden , float value = 0f )
+    /// <param name="conditionType">The condition type.</param>
+    /// <param name="visibilityType">The visibility action to perform if the condition is not met.</param>
+    /// <param name="conditionValue">The condition argument value.</param>
+    public ConditionAttribute( string conditionPropertyName , ConditionType conditionType , VisibilityType visibilityType = VisibilityType.Hidden , float conditionValue = 0f )
     {
         this.conditionPropertyName = conditionPropertyName;
         this.conditionType = conditionType;
         this.visibilityType = visibilityType;
-        this.value = value;
+        this.value = conditionValue;
+
     }
 }
 
